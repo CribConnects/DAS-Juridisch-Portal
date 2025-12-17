@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegalEase AI - Powered by DAS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0066b3 0%, #005a9c 50%, #0077cc 100%);
+            background-attachment: fixed;
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* Glassmorphism Header */
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .logo-title {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .powered-by {
+            font-size: 12px;
+            opacity: 0.85;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 10px 20px;
+            border-radius: 50px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0066b3 0%, #0077cc 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .user-details {
+            text-align: right;
+        }
+
+        .user-welcome {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 25px;
+        }
+
+        /* Glassmorphism Sidebar */
+        .sidebar {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            height: fit-content;
+            position: sticky;
+            top: 110px;
+        }
+
+        .nav-item {
+            padding: 16px 20px;
+            margin-bottom: 8px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+            color: white;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-item:hover::before {
+            opacity: 1;
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-item .icon {
+            font-size: 20px;
+            width: 24px;
+            text-align: center;
+        }
+
+        /* Glassmorphism Main Content */
+        .main-content {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            min-height: 600px;
+            margin-bottom: 120px;
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            color: white;
+            font-size: 36px;
+            margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 16px;
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 28px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-card h3 {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .stat-card .number {
+            font-size: 36px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -1px;
+        }
+
+        /* Upload Zone */
+        .upload-zone {
+            border: 2px dashed rgba(255, 255, 255, 0.4);
+            border-radius: 20px;
+            padding: 60px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .upload-zone:hover {
+            border-color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .upload-zone.dragover {
+            border-color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .upload-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+
+        .upload-zone h3 {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .upload-zone p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 16px;
+        }
+
+        .upload-button {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 15px 35px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .upload-button:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.35);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Document List */
+        .document-list {
+            margin-top: 30px;
+        }
+
+        .document-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .document-item:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(4px);
+        }
+
+        .document-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .doc-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .doc-details h4 {
+            color: white;
+            font-size: 16px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .doc-details p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .doc-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            padding: 10px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            color: white;
+            font-weight: 500;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .btn-delete {
+            background: rgba(244, 67, 54, 0.2);
+            border-color: rgba(244, 67, 54, 0.4);
+        }
+
+        .btn-delete:hover {
+            background: rgba(244, 67, 54, 0.3);
+        }
+
+        /* Chat Section */
+        .chat-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            height: 600px;
+        }
+
+        .chat-main {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding-right: 10px;
+        }
+
+        .messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .messages::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .messages::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .message-content {
+            max-width: 70%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .message.user .message-content {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .message-time {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 5px;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .chat-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .chat-input:focus {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .send-btn {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 15px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -35px;
+            top: 28px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: white;
+            border: 3px solid rgba(0, 102, 179, 0.5);
+            box-shadow: 0 0 0 4px rgba(0, 102, 179, 0.2);
+        }
+
+        .timeline-date {
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .timeline-title {
+            font-size: 17px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .timeline-desc {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .badge-new {
+            background: rgba(76, 175, 80, 0.3);
+            color: white;
+        }
+
+        .badge-pending {
+            background: rgba(255, 152, 0, 0.3);
+            color: white;
+        }
+
+        .badge-completed {
+            background: rgba(33, 150, 243, 0.3);
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+
+            .logo-title {
+                font-size: 20px;
+            }
+
+            .powered-by {
+                font-size: 10px;
+            }
+
+            .main-content {
+                padding: 24px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .upload-zone {
+                padding: 40px 20px;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="brand-text">
+            <div class="logo-title">LegalEase AI</div>
+            <div class="powered-by">Powered by DAS Rechtsbijstand</div>
+        </div>
+        <div class="user-info">
+            <div class="user-details">
+                <div class="user-welcome">Welkom terug,</div>
+                <div class="user-name">Jan de Vries</div>
+            </div>
+            <div class="user-avatar">👤</div>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="nav-item active" data-section="dashboard">
+                <span class="icon">📊</span>
+                <span>Dashboard</span>
+            </div>
+            <div class="nav-item" data-section="documents">
+                <span class="icon">📄</span>
+                <span>Mijn Documenten</span>
+                <span class="badge badge-new">3</span>
+            </div>
+            <div class="nav-item" data-section="chat">
+                <span class="icon">💬</span>
+                <span>Juridisch Advies</span>
+            </div>
+            <div class="nav-item" data-section="timeline">
+                <span class="icon">📅</span>
+                <span>Mijn Dossier</span>
+            </div>
+            <div class="nav-item" data-section="settings">
+                <span class="icon">⚙️</span>
+                <span>Instellingen</span>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Dashboard Section -->
+            <div class="content-section active" id="dashboard">
+                <h1>Dashboard</h1>
+                <p class="subtitle">Welkom in uw persoonlijk juridisch portaal</p>
+
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <h3>Documenten</h3>
+                        <div class="number">8</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Status Dossier</h3>
+                        <div class="number" style="font-size: 20px; margin-top: 10px;">In behandeling</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Laatste Update</h3>
+                        <div class="number" style="font-size: 18px; margin-top: 10px;">2 dagen geleden</div>
+                    </div>
+                </div>
+
+                <h2 style="margin-bottom: 20px; color: white; font-size: 24px;">Recente Activiteiten</h2>
+
+                <div class="document-list">
+                    <div class="document-item">
+                        <div class="document-info">
+                            <div class="doc-icon">📄</div>
+                            <div class="doc-details">
+                                <h4>Arbeidsovereenkomst geüpload</h4>
+                                <p>Vandaag om 14:32 • Door u</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-new">Nieuw</span>
+                    </div>
+
+                    <div class="document-item">
+                        <div class="document-info">
+                            <div class="doc-icon">💬</div>
+                            <div class="doc-details">
+                                <h4>Adviesgesprek gevoerd</h4>
+                                <p>Gisteren om 16:45 • Met juridisch adviseur</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-completed">Voltooid</span>
+                    </div>
+
+                    <div class="document-item">
+                        <div class="document-info">
+                            <div class="doc-icon">📋</div>
+                            <div class="doc-details">
+                                <h4>Intake formulier ontvangen</h4>
+                                <p>3 dagen geleden • Door DAS</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-pending">In afwachting</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documents Section -->
+            <div class="content-section" id="documents">
+                <h1>Mijn Documenten</h1>
+                <p class="subtitle">Upload en beheer uw juridische documenten</p>
+
+                <div class="upload-zone" id="uploadZone">
+                    <div class="upload-icon">📤</div>
+                    <h3>Sleep bestanden hierheen</h3>
+                    <p>of klik om te uploaden</p>
+                    <p style="margin-top: 10px; font-size: 14px; opacity: 0.7;">Ondersteunde formaten: PDF, DOC, DOCX, JPG, PNG (max. 10MB)</p>
+                    <button class="upload-button" onclick="document.getElementById('fileInput').click()">
+                        Kies Bestanden
+                    </button>
+                    <input type="file" id="fileInput" multiple style="display: none;" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                </div>
+
+                <h2 style="margin-bottom: 20px; color: white; font-size: 24px;">Geüploade Documenten (8)</h2>
+
+                <div class="document-list" id="documentList">
+                    <div class="document-item">
+                        <div class="document-info">
+                            <div class="doc-icon">📄</div>
+                            <div class="doc-details">
+                                <h4>Arbeidsovereenkomst_2024.pdf</h4>
+                                <p>Geüpload: 17 dec 2024 • 2.3 MB</p>
+                            </div>
+                        </div>
+                        <div class="doc-actions">
+                            <button class="action-btn btn-view">👁️ Bekijk</button>
+                            <button class="action-btn btn-delete">🗑️ Verwijder</button>
+                        </div>
+                    </div>
+
+                    <div class="document-item">
+                        <div class="document-info">
+                            <div class="doc-icon">📄</div>
+                            <div class="doc-details">
+                                <h4>Ontslagbrief.pdf</h4>
+                                <p>Geüpload: 15 dec 2024 • 856 KB</p>
+                            </div>
+                        </div>
+                        <div class="doc-actions">
+                            <button class="action-btn btn-view">👁️ Bekijk</button>
+                            <button class="action-btn btn-delete">🗑️ Verwijder</button>
+                        </div>
+                    </div>
+
+                    <div class="document-item">
+                        <div class="document-info">
+                            <div class="doc-icon">📄</div>
+                            <div class="doc-details">
+                                <h4>Loonstroken_2024.pdf</h4>
+                                <p>Geüpload: 14 dec 2024 • 1.8 MB</p>
+                            </div>
+                        </div>
+                        <div class="doc-actions">
+                            <button class="action-btn btn-view">👁️ Bekijk</button>
+                            <button class="action-btn btn-delete">🗑️ Verwijder</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Section -->
+            <div class="content-section" id="chat">
+                <h1>Juridisch Advies</h1>
+                <p class="subtitle">Stel uw vragen aan onze AI adviseur</p>
+
+                <div class="chat-container">
+                    <div class="chat-main">
+                        <div class="messages" id="messages">
+                            <div class="message">
+                                <div class="message-avatar">🤖</div>
+                                <div>
+                                    <div class="message-content">
+                                        Goedemiddag! Ik ben uw LegalEase AI adviseur, powered by DAS. Ik heb gezien dat u recent documenten heeft geüpload over uw arbeidsituatie. Waarmee kan ik u vandaag helpen?
+                                    </div>
+                                    <div class="message-time">14:30</div>
+                                </div>
+                            </div>
+
+                            <div class="message user">
+                                <div class="message-avatar">👤</div>
+                                <div>
+                                    <div class="message-content">
+                                        Ik heb vragen over mijn ontslag en de vergoeding die ik zou moeten ontvangen.
+                                    </div>
+                                    <div class="message-time">14:32</div>
+                                </div>
+                            </div>
+
+                            <div class="message">
+                                <div class="message-avatar">🤖</div>
+                                <div>
+                                    <div class="message-content">
+                                        Ik begrijp uw vraag. Op basis van uw arbeidsovereenkomst en de Wet Arbeidsovereenkomst heeft u mogelijk recht op een transitievergoeding. Laten we dit samen doornemen. Hoeveel jaar was u in dienst?
+                                    </div>
+                                    <div class="message-time">14:32</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="chat-input-area">
+                            <input type="text" class="chat-input" id="chatInput" placeholder="Typ uw vraag...">
+                            <button class="send-btn" id="sendBtn">Verstuur</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Section -->
+            <div class="content-section" id="timeline">
+                <h1>Mijn Dossier</h1>
+                <p class="subtitle">Overzicht van uw juridische zaak</p>
+
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-date">17 december 2024</div>
+                        <div class="timeline-title">Documenten geüpload ✅</div>
+                        <div class="timeline-desc">
+                            U heeft uw arbeidsovereenkomst en ontslagbrief geüpload. Deze worden nu beoordeeld door onze AI adviseur.
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">16 december 2024</div>
+                        <div class="timeline-title">Eerste adviesgesprek gevoerd 💬</div>
+                        <div class="timeline-desc">
+                            Intake gesprek met AI adviseur voltooid. Alle benodigde informatie verzameld voor beoordeling van uw zaak.
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">15 december 2024</div>
+                        <div class="timeline-title">Account aangemaakt 🎉</div>
+                        <div class="timeline-desc">
+                            Welkom bij LegalEase AI! Uw persoonlijk dossier is aangemaakt en u heeft toegang tot al onze diensten.
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-date">Volgende stappen</div>
+                        <div class="timeline-title">Juridische beoordeling ⏳</div>
+                        <div class="timeline-desc">
+                            Onze AI specialisten beoordelen uw zaak en stellen een adviesrapport op. U ontvangt binnen 3 werkdagen bericht.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Section -->
+            <div class="content-section" id="settings">
+                <h1>Instellingen</h1>
+                <p class="subtitle">Beheer uw accountinstellingen</p>
+
+                <div style="max-width: 600px;">
+                    <h3 style="color: white; margin: 30px 0 15px; font-size: 20px;">Persoonlijke Gegevens</h3>
+
+                    <div class="document-item">
+                        <div class="document-info">
+                            <div class="doc-details">
+                                <h4>Naam</h4>
+                                <p>Jan de Vries</p>
+                            </div>
+                        </div>
+                        <button class="action-btn btn-view">Wijzig</button>
+                    </div>
+
+                    <div class="document-item">
+                        <div class="document-info">
+                            <div class="doc-details">
+                                <h4>E-mailadres</h4>
+                                <p>jan.devries@email.nl</p>
+                            </div>
+                        </div>
+                        <button class="action-btn btn-view">Wijzig</button>
+                    </div>
+
+                    <div class="document-item">
+                        <div class="document-info">
+                            <div class="doc-details">
+                                <h4>Telefoonnummer</h4>
+                                <p>+31 6 12345678</p>
+                            </div>
+                        </div>
+                        <button class="action-btn btn-view">Wijzig</button>
+                    </div>
+
+                    <h3 style="color: white; margin: 30px 0 15px; font-size: 20px;">Notificaties</h3>
+
+                    <div class="document-item">
+                        <div class="document-info">
+                            <div class="doc-details">
+                                <h4>E-mail notificaties</h4>
+                                <p>Ontvang updates over uw dossier</p>
+                            </div>
+                        </div>
+                        <label style="cursor: pointer;">
+                            <input type="checkbox" checked> Aan
+                        </label>
+                    </div>
+
+                    <div class="document-item">
+                        <div class="document-info">
+                            <div class="doc-details">
+                                <h4>SMS notificaties</h4>
+                                <p>Belangrijke updates via SMS</p>
+                            </div>
+                        </div>
+                        <label style="cursor: pointer;">
+                            <input type="checkbox" checked> Aan
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HeyGen Avatar Script -->
+    <script>
+        !function(window){const host="https://labs.heygen.com",url=host+"/guest/streaming-embed?share=eyJxdWFsaXR5IjoiaGlnaCIsImF2YXRhck5hbWUiOiJKdW5lX0hSX3B1YmxpYyIsInByZXZpZXdJ%0D%0AbWciOiJodHRwczovL2ZpbGVzMi5oZXlnZW4uYWkvYXZhdGFyL3YzLzc0NDQ3YTI3ODU5YTQ1NmM5%0D%0ANTVlMDFmMjFlZjE4MjE2XzQ1NjIwL3ByZXZpZXdfdGFsa18xLndlYnAiLCJuZWVkUmVtb3ZlQmFj%0D%0Aa2dyb3VuZCI6ZmFsc2UsImtub3dsZWRnZUJhc2VJZCI6ImU5Y2RlZDIzODZiODQxYzdhYWVlMGEy%0D%0AMTJiMTk0NGNlIiwidXNlcm5hbWUiOiJlZDk1YTE1NzM5NTM0YWNhOTRjZTZmMzkzNWEzODVkOCJ9&inIFrame=1",clientWidth=document.body.clientWidth,wrapDiv=document.createElement("div");wrapDiv.id="heygen-streaming-embed";const container=document.createElement("div");container.id="heygen-streaming-container";const stylesheet=document.createElement("style");stylesheet.innerHTML=`
+  #heygen-streaming-embed {
+    z-index: 9999;
+    position: fixed;
+    left: 40px;
+    bottom: 40px;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    box-shadow: 0px 8px 24px 0px rgba(0, 0, 0, 0.12);
+    transition: all linear 0.1s;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+  }
+  #heygen-streaming-embed.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  #heygen-streaming-embed.expand {
+    ${clientWidth<540?"height: 266px; width: 96%; left: 50%; transform: translateX(-50%);":"height: 366px; width: calc(366px * 16 / 9);"}
+    border: 0;
+    border-radius: 8px;
+  }
+  #heygen-streaming-container {
+    width: 100%;
+    height: 100%;
+  }
+  #heygen-streaming-container iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  `;const iframe=document.createElement("iframe");iframe.allowFullscreen=!1,iframe.title="Streaming Embed",iframe.role="dialog",iframe.allow="microphone",iframe.src=url;let visible=!1,initial=!1;window.addEventListener("message",(e=>{e.origin===host&&e.data&&e.data.type&&"streaming-embed"===e.data.type&&("init"===e.data.action?(initial=!0,wrapDiv.classList.toggle("show",initial)):"show"===e.data.action?(visible=!0,wrapDiv.classList.toggle("expand",visible)):"hide"===e.data.action&&(visible=!1,wrapDiv.classList.toggle("expand",visible)))})),container.appendChild(iframe),wrapDiv.appendChild(stylesheet),wrapDiv.appendChild(container),document.body.appendChild(wrapDiv)}(globalThis);
+    </script>
+
+    <!-- Portal Functionality -->
+    <script>
+        // Navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        const contentSections = document.querySelectorAll('.content-section');
+
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const sectionId = item.dataset.section;
+                navItems.forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+
+                contentSections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === sectionId) {
+                        section.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // File Upload
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const documentList = document.getElementById('documentList');
+
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('dragover');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            handleFiles(files);
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                const docItem = document.createElement('div');
+                docItem.className = 'document-item';
+                docItem.style.animation = 'slideIn 0.3s ease';
+
+                const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                const currentDate = new Date().toLocaleDateString('nl-NL');
+
+                docItem.innerHTML = `
+                    <div class="document-info">
+                        <div class="doc-icon">📄</div>
+                        <div class="doc-details">
+                            <h4>${file.name}</h4>
+                            <p>Geüpload: ${currentDate} • ${fileSize} MB</p>
+                        </div>
+                    </div>
+                    <div class="doc-actions">
+                        <button class="action-btn btn-view">👁️ Bekijk</button>
+                        <button class="action-btn btn-delete">🗑️ Verwijder</button>
+                    </div>
+                `;
+
+                documentList.insertBefore(docItem, documentList.firstChild);
+
+                docItem.querySelector('.btn-delete').addEventListener('click', () => {
+                    docItem.remove();
+                });
+            });
+        }
+
+        // Chat Functionality
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const messagesContainer = document.getElementById('messages');
+
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+
+            const userMsg = document.createElement('div');
+            userMsg.className = 'message user';
+            userMsg.innerHTML = `
+                <div class="message-avatar">👤</div>
+                <div>
+                    <div class="message-content">${message}</div>
+                    <div class="message-time">${new Date().toLocaleTimeString('nl-NL', {hour: '2-digit', minute: '2-digit'})}</div>
+                </div>
+            `;
+
+            messagesContainer.appendChild(userMsg);
+            chatInput.value = '';
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            setTimeout(() => {
+                const botMsg = document.createElement('div');
+                botMsg.className = 'message';
+                botMsg.innerHTML = `
+                    <div class="message-avatar">🤖</div>
+                    <div>
+                        <div class="message-content">Dank u voor uw vraag. Ik ga dit voor u uitzoeken en kom zo snel mogelijk met een passend advies.</div>
+                        <div class="message-time">${new Date().toLocaleTimeString('nl-NL', {hour: '2-digit', minute: '2-digit'})}</div>
+                    </div>
+                `;
+
+                messagesContainer.appendChild(botMsg);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 1000);
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
